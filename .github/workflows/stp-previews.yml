@@ -61,7 +61,8 @@ jobs:
 
       - name: Render previews
         env:
-          FORCE: ${{ inputs.force && '--force' || '' }}
+          # PRs always re-render so the artifact shows every part as CI sees it.
+          FORCE: ${{ (inputs.force || github.event_name == 'pull_request') && '--force' || '' }}
         run: python scripts/stp-previews/render.py $FORCE
 
       - name: Upload previews (pull requests)
